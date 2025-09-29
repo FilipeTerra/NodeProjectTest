@@ -244,4 +244,20 @@ router.get('/delete/:id', function(req, res, next){
   });
 });
 
+/* Rota vulnerável para fins de teste */
+router.get('/search', function(req, res, next) {
+  var posts = db.get('posts');
+  var userInput = req.query.title; // Entrada do usuário sem sanitização
+
+  posts.find({ title: userInput }, {}, function(err, posts){
+    if (err) {
+        return next(err);
+    }
+    res.render('index', {
+        "posts": posts,
+        "title": "Resultados da Busca"
+    });
+  });
+});
+
 module.exports = router;
